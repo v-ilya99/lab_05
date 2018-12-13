@@ -1,6 +1,7 @@
 #include <iostream>
 #include "boost/filesystem.hpp"
 #include <vector>
+#include <boost/regex.hpp>
 
 using namespace boost::filesystem;
 
@@ -15,7 +16,12 @@ int main(int argc, char *argv[])
         if (exists(p)){
            std::cout << argv[1] << " is exists" << std::endl;
            if (is_regular_file(p)){
-               std::cout << p << " is file. size = " << file_size(p) << std::endl;
+               std::cout << p << " is file. Size = " << file_size(p) << std::endl;
+
+               const boost::regex file_filter("balance_[0-9]{8}_[0-9]{8}.txt");
+               if (boost::regex_match(p.filename(), file_filter, boost::regex_constants::match_default)){
+                   std::cout << "File is good" << std::endl;
+               }
            }
            else if (is_directory(p)){
                std::cout << p << " is directory" << std::endl;
