@@ -6,17 +6,16 @@
 #include <string>
 #include <map>
 #include "boost/filesystem.hpp"
-#include "boost/date_time/gregorian/gregorian.hpp"
 
 namespace fs = boost::filesystem;
 
 struct acc
 {
     std::string m_brocker; // название брокера
-    boost::gregorian::date m_date; // дата
+    uint32_t m_date; // дата
     int32_t m_count; // кол-во файлов
 
-    acc(const std::string &brocker, boost::gregorian::date &dt, const int32_t count = 0)
+    acc(std::string brocker, uint32_t dt, const int32_t count = 0)
         : m_brocker(brocker), m_date(dt), m_count(count)
     {
     }
@@ -30,7 +29,7 @@ public:
     void parse();
 private:
     void check_path(fs::path value);
-    acc brockers_parse(std::string &brocker, std::string &fn);
+    acc brockers_parse(std::string &brocker, std::string &fn, acc &test_acc);
 private:
     fs::path m_path;
     std::map<std::string, acc> m_brockers;

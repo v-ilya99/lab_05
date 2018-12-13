@@ -24,6 +24,8 @@ void dirparser::check_path(boost::filesystem::path value)
     if (is_regular_file(value)){
         //std::cout << value << " is file. Size = " << file_size(value) << std::endl;
         const boost::regex file_filter("balance_[0-9]{8}_[0-9]{8}.txt");
+
+        acc temp_acc("", 0, 0);
         if (boost::regex_match(value.filename().string(), file_filter, boost::regex_constants::match_default)){
 
             boost::filesystem::path dir = value.parent_path();
@@ -52,16 +54,25 @@ void dirparser::check_path(boost::filesystem::path value)
     }
 }
 
-acc dirparser::brockers_parse(std::string &brocker, std::string &fn)
+void dirparser::brockers_parse(std::string &brocker, std::string &fn, acc &test_acc)
 {
+    //using namespace boost::gregorian;
     std::string raw = fs::change_extension(fn, "").string();
     raw.erase(0, 8);
     std::string account(raw.substr(0, 8));
     std::string date(raw.substr(9, 8));
+    char *end;
     std::cout << "account = " << account << "\t date = " << date << std::endl;
     //std::string tmp;
     //std::size_t sep = value.parent_path().string().find_last_of("_");
-    boost::gregorian::date dt;
-    acc temp(brocker, dt, 0);
-    return temp;
+    //int year
+    uint32_t dt = std::strtoul(date.c_str(), &end, 10);
+    test_acc.m_count++;
+    if(dt > test_acc.m_date)
+    {
+        test_acc.m_date = dt;
+        //test_acc.m_brocker = brocker;
+    }
+    //acc temp(brocker, dt, 0);
+    //return temp;
 }
